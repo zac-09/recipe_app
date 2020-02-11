@@ -6,8 +6,15 @@ import { MainScreen } from "./navigation/MealsNavigator";
 import Colors from "./constants/Colors";
 import { useScreens, enableScreens } from "react-native-screens";
 import { NavigationContainer } from "@react-navigation/native";
-
+import { createStore, combineReducers } from "redux";
+import mealsReducer from "./store/meal";
+import { Provider } from "react-redux";
 enableScreens();
+const rootReducer = combineReducers({
+  meals: mealsReducer
+});
+const store = createStore(rootReducer);
+
 const fetchFonts = () => {
   return Font.loadAsync({
     "open-sans": require("./assets/fonts/OpenSans-Regular.ttf"),
@@ -28,9 +35,11 @@ export default function App() {
     );
   }
   return (
-    <NavigationContainer>
-      <MainScreen />
-    </NavigationContainer>
+    <Provider store={store}>
+      <NavigationContainer>
+        <MainScreen />
+      </NavigationContainer>
+    </Provider>
   );
 }
 
